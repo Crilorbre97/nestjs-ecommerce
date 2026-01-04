@@ -4,6 +4,9 @@ import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { Roles } from './decorators/roles.decorator';
+import { UserRole } from './entities/user.entity';
+import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +26,13 @@ export class AuthController {
     @Get('profile')
     profile(@CurrentUser() user: any){
         return user
+    }
+
+    @Post('register-admin')
+    @Roles(UserRole.ADMIN)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    registerAdmin(@Body() dto: RegisterUserDto){
+        return "Creating new admin"
     }
 
 }
