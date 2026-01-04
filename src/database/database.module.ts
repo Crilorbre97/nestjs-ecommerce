@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { CustomTypeOrmLogger } from 'src/common/loggers/typeorm-logger';
 
 @Module({
     imports: [
@@ -16,6 +17,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
                 database: config.get('database.name'),
                 entities: [__dirname + '/../**/*.entity.{js,ts}'],
                 migrations: [__dirname + '/../migrations/*.{js,ts}'],
+                logging: true,
+                logger: new CustomTypeOrmLogger(),
+                maxQueryExecutionTime: 200
             })
         })
     ]
